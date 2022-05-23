@@ -1,0 +1,69 @@
+class Parser_e{
+    
+private:
+    // Atributos
+    Archivo datos_escritores;
+    
+    // Métodos privados
+    Escritor* crear_escritor(string datos[5]);  // Como se pasa el parámetro ???
+    almacenar_escritor(Escritor* nuevo_escritor, Lista<Escritor> lista_escritores);
+
+public:
+
+    // Constructor
+    Parser_e();
+    
+    // Destructor
+    ~Parser_e();
+    
+    // Métodos
+    void procesar_archivo(Lista<Escritor> lista_escritores);
+};
+
+
+Parser_e :: Parser_e(){
+    datos_escritores = new Archivo("Escritores.txt");
+}
+
+
+Parser_e :: procesar_archivo(Lista<Escritor> lista_escritores){
+    string linea;
+    const int CAPACIDAD = 5;  // Deberia ir en archivo de constantes
+    int tamanio = 0;
+    while(!datos_escritores.final_archivo()){
+        string datos[CAPACIDAD];
+        
+        for(int i = 0; i < 5; i++){
+            linea = datos_escritores.obtener_linea();
+            if (linea)
+                datos[i] = linea;
+                tamanio++;
+            else{
+                while(tamanio < CAPACIDAD)
+                    datos[i] = "-1";
+                
+                Escritor* nuevo_escritor = crear_escritor(datos);
+                almacenar_escritor(nuevo_escritor, lista_escritores);
+            }
+        }
+    }
+}
+
+
+Escritor* Parser_e :: crear_escritor(string datos[5]){  // 0 = numero
+    string nombre = datos[NOMBRE_AUTOR];                    // NOMBRE_AUTOR = 1
+    string nacionalidad = datos[NACIONALIDAD];              // NACIONALIDAD = 2
+    int nacimiento = (int) stof(datos[NACIMIENTO]);         // NACIMIENTO = 3
+    int fallecimiento = (int) stof(datos[FALLECIMIENTO]);   // FALLECIMIENTO = 4
+    
+    Escritor* nuevo_escritor = new Escritor(nombre, nacionalidad, nacimiento, fallecimiento);
+    return nuevo_escritor;
+}
+
+
+void Parser_e :: almacenar_escritor(){
+    lista_escritores.alta(nuevo_escritor, lista_escritores.obtener_tamanio() - 1);
+}
+
+Parser_e :: ~Parser_e(){}
+    
