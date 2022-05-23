@@ -1,16 +1,25 @@
 class Parser_l{
     
 private:
+    // Atributos
     Archivo datos_escritores;
     
+    // Métodos privados
     Lectura* crear_cuento(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
     Lectura* crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
     Lectura* crear_poema(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
-    
     int rastrear_escritor(int indice, Lista<Escritor> lista_escritores);
-    void almacenar_lectura(Lista <Lectura> lista_lecturas)
+    void almacenar_lectura(Lectura* nueva_lectura, Lista <Lectura> lista_lecturas);
 
 public:
+
+    // Constructor
+    Parser_l();
+    
+    // Destructor
+    ~Parser_l();
+
+    // Métodos
     void procesar_archivo(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
 };
 
@@ -26,18 +35,16 @@ Parser_l :: procesar_archivo(Lista<Lectura> lista_lecturas, Lista<Escritor> list
         switch(linea){
             case linea == "C":{
                 Lectura* nuevo_cuento = crear_cuento(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
-                lista_lecturas.alta(nuevo_cuento, lista_lecturas.obtener_tamanio() - 1); break;
+                almacenar_lectura(nuevo_cuento, lista_lecturas); break;
             }
             case linea == "P":{
                 Lectura* nuevo_poema = crear_poema(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
-                lista_lecturas.alta(nuevo_poema, lista_lecturas.obtener_tamanio() - 1); break;
+                 almacenar_lectura(nuevo_poema, lista_lecturas); break;
             }
             case linea == "N":{
                 Lectura* nueva_novela = crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
-                lista_lecturas.alta(nueva_novela, lista_lecturas.obtener_tamanio() - 1); break;
-            }
-            default:
-                
+                 almacenar_lectura(nueva_novela, lista_lecturas); break;
+            }   
         }
         datos_escritores.obtener_linea(); // Salteo la linea vacía
     }
@@ -91,4 +98,8 @@ Lectura* Parser_l :: crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor>
         nueva_novela = new Novela(titulo, minutos, anio, escritor_novela, versos);
     }
     return nueva_novela;
+}
+
+void Parser_l :: almacenar_lectura(Lectura* nueva_lectura, Lista <Lectura> lista_lecturas){
+    lista_lecturas.alta(nueva_lectura, lista_lecturas.obtener_tamanio() - 1);
 }
