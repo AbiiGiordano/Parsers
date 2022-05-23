@@ -1,0 +1,94 @@
+class Parser_l{
+    
+private:
+    Archivo datos_escritores;
+    
+    Lectura* crear_cuento(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+    Lectura* crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+    Lectura* crear_poema(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+    
+    int rastrear_escritor(int indice, Lista<Escritor> lista_escritores);
+    void almacenar_lectura(Lista <Lectura> lista_lecturas)
+
+public:
+    void procesar_archivo(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+};
+
+
+Parser_l :: Parser_e(){
+    datos_escritores = New Archivo("Lecturas.txt");
+}
+
+Parser_l :: procesar_archivo(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores)(){
+    while(!datos_escritores.final_archivo()){
+        string linea = datos_escritores.obtener_linea();
+        
+        switch(linea){
+            case linea == "C":{
+                Lectura* nuevo_cuento = crear_cuento(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+                lista_lecturas.alta(nuevo_cuento, lista_lecturas.obtener_tamanio() - 1); break;
+            }
+            case linea == "P":{
+                Lectura* nuevo_poema = crear_poema(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+                lista_lecturas.alta(nuevo_poema, lista_lecturas.obtener_tamanio() - 1); break;
+            }
+            case linea == "N":{
+                Lectura* nueva_novela = crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores);
+                lista_lecturas.alta(nueva_novela, lista_lecturas.obtener_tamanio() - 1); break;
+            }
+            default:
+                
+        }
+        datos_escritores.obtener_linea(); // Salteo la linea vacía
+    }
+}
+
+Lectura* Parser_l:: crear_cuento(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores){
+    string titulo = datos_escritores.obtener_linea();
+    int minutos = (int) stof(datos_escritores.obtener_linea());
+    int anio = (int) stof(datos_escritores.obtener_linea());
+    string libro = datos_escritores.obtener_linea();
+    
+    int indice_autor = (int) stof(datos_escritores.obtener_linea()[1]);
+    Escritor* escritor_cuento = rastrear_escritor(indice_autor, lista_escritores);
+    
+    Lectura* nuevo_cuento = new Cuento(titulo, minutos, anio, escritor_cuento, libro);
+    return nuevo_cuento;
+}
+
+Lectura* Parser_l :: crear_poema(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores){
+    string titulo = datos_escritores.obtener_linea();
+    int minutos = (int) stof(datos_escritores.obtener_linea());
+    int anio = (int) stof(datos_escritores.obtener_linea());
+    int versos = (int) stof(datos_escritores.obtener_linea());
+    
+    int indice_autor = (int) stof(datos_escritores.obtener_linea()[1]);
+    Escritor* escritor_poema = rastrear_escritor(indice_autor, lista_escritores);
+    
+    Lectura* nuevo_poema = new Poema(titulo, minutos, anio, escritor_poema, versos);
+    return nuevo_poema 
+}
+
+Lectura* Parser_l :: crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor> lista_escritores){
+    Lectura* nueva_novela = nullptr;
+    
+    string titulo = datos_escritores.obtener_linea();
+    int minutos = (int) stof(datos_escritores.obtener_linea());
+    int anio = (int) stof(datos_escritores.obtener_linea());
+    generos genero = (generos) stof(datos_escritores.obtener_linea());
+    if (genero == "HISTORICA"){
+        char* tema = (char*) stof(datos_escritores.obtener_linea());
+        
+        int indice_autor = (int) stof(datos_escritores.obtener_linea()[1]);
+        Escritor* escritor_novela_historica = rastrear_escritor(indice_autor, lista_escritores);
+        
+        nueva_novela = new Novela_historica(titulo, minutos, anio, escritor_novela_historica, versos);
+    }
+    else{
+        int indice_autor = (int) stof(datos_escritores.obtener_linea()[1]);
+        Escritor* escritor_novela = rastrear_escritor(indice_autor, lista_escritores);
+        
+        nueva_novela = new Novela(titulo, minutos, anio, escritor_novela, versos);
+    }
+    return nueva_novela;
+}
