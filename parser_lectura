@@ -103,3 +103,5 @@ Lectura* Parser_l :: crear_novela(Lista<Lectura> lista_lecturas, Lista<Escritor>
 void Parser_l :: almacenar_lectura(Lectura* nueva_lectura, Lista <Lectura> lista_lecturas){
     lista_lecturas.alta(nueva_lectura, lista_lecturas.obtener_tamanio() - 1);
 }
+
+Parser_l :: ~Parser_l(){}
